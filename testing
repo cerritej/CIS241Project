@@ -1,0 +1,8 @@
+#!/bin/bash
+
+find . -type f -print0 | xargs -0 sha1sum > sum
+
+cut -d" " -f1 sum | sha1sum > final
+
+cat final | sha1sum
+

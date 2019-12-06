@@ -1,0 +1,14 @@
+\#!/bin/bash
+
+readarray -t a < ./testList
+
+
+echo "${#a[@]}"
+
+sha1sum "
+
+for i in "${a[@]}"
+do
+ echo ${i}
+done
+

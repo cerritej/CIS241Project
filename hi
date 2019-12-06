@@ -1,0 +1,63 @@
+#!/bin/bash
+
+find . -type f -print0 | xargs -0 sha1sum | cut -d" " -f1 > sum
+
+readarray -t a < ./sum
+size=$(echo "${#a[@]}")
+flag=0
+rem=$((size%2))
+
+if((rem==1))
+then
+ flag=1
+ echo flag set
+fi
+
+size=$((size/2))
+
+while :
+do 
+echo SIZE $size
+
+if((size<1))
+then
+break
+fi
+
+for i in $(seq 0 $size)
+do
+var1="${a[$i*2]}${a[$i*2+1]}"
+a[i]=$(echo -n $var1 | sha1sum | awk '{print $1}')
+done
+
+if((flag==1))
+then
+size=$((size+1))
+a[size]="${a[$size+1]}"
+rem=(size%2)
+	if((rem==0))
+	then
+	flag=0
+	
+	else
+	flag=1
+	fi
+size=$((size/2))
+echo size
+else
+echo Flag = 0
+rem=$((size%2))
+	if((rem==0))
+	then
+	flag=0
+	
+	else
+	flag=1
+	fi
+size=$((size/2))
+fi
+
+done
+
+
+echo ${a[0]}
